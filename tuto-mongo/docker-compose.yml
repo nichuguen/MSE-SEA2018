@@ -1,0 +1,31 @@
+version: '2.1'
+services:
+
+### Application Code Container
+
+  tuto_application:
+      # name of the container. if you list all running containers using `docker ps` it'll be easier to find
+      container_name: tuto_mongo_app
+      
+      # if you want your container to start at boot time, uncomment the next line
+      # restart: always
+      
+      # this tells docker to build an image using the Dockerfile in ./server
+      build: ./server
+      # and the image name will be tuto/tuto_app
+      image: tuto_mongo/tuto_app
+      
+      ports:
+        # you can change the local-port
+        # [local-ip]:[local-port]:[container-port]
+        - "8080:8080"
+      depends_on:
+        - mongodb
+
+  mongodb:
+      image: mongo:latest
+      # container name is the host name, used in server/Dockerfile
+      container_name: "tuto-mongodb"
+      ports:
+        - "27017:27017"
+      hostname: mongodb
