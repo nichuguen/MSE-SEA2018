@@ -9,12 +9,18 @@ services:
       
       # if you want your container to start at boot time, uncomment the next line
       # restart: always
-      
-      # and the image name will be tuto/tuto_app
-      image: jenkins/jenkins
+     
+      build: .
+
+      volumes:
+          - jenkins-data:/var/jenkins_home
+          - /var/run/docker.sock:/var/run/docker.sock
       
       ports:
         # you can change the local-port
         # [local-ip]:[local-port]:[container-port]
         - "9080:8080"
         - "50000:50000"
+
+volumes:
+  jenkins-data:
