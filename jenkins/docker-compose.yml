@@ -1,0 +1,20 @@
+version: '2.1'
+services:
+
+### Application Code Container
+
+  jenkins_application:
+      # name of the container. if you list all running containers using `docker ps` it'll be easier to find
+      container_name: jenkins_app
+      
+      # if you want your container to start at boot time, uncomment the next line
+      # restart: always
+      
+      # and the image name will be tuto/tuto_app
+      image: jenkins/jenkins
+      
+      ports:
+        # you can change the local-port
+        # [local-ip]:[local-port]:[container-port]
+        - "9080:8080"
+        - "50000:50000"
