@@ -1,4 +1,4 @@
-FROM jenkins/jenkins:2.107.2-alpine
+FROM jenkins/jenkins:2.107.2
 
 #
 # Running jenkins as root (instead as jenkins) is not recommended for a regular CD server. However,
@@ -15,7 +15,9 @@ USER root
 # Install docker and docker-compose. Note that on alpine, we may be behind latest releases... See bottom of
 # this file to build an image with the latest version on a another linux distribution.
 #
-RUN apk update && apk add docker make py-pip shadow maven && pip install docker-compose
+RUN apt-get update
+RUN apt-get install docker make python-pip maven -y
+RUN pip install docker-compose
 RUN usermod -aG users jenkins
 
 #
