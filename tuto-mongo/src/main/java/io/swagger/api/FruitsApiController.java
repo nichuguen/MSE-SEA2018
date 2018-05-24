@@ -1,10 +1,12 @@
 package io.swagger.api;
 
+import hello.FruitRepository;
 import io.swagger.model.Fruit;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -37,11 +39,19 @@ public class FruitsApiController implements FruitsApi {
         this.request = request;
     }
 
+    @Autowired
+    FruitRepository fruitRepository;
+
     public ResponseEntity<Object> createFruit(@ApiParam(value = "" ,required=true )  @Valid @RequestBody Fruit fruit) {
         String accept = request.getHeader("Accept");
+
+        System.out.println("this is a test");
+
+
+
         if (accept != null && accept.contains("application/json")) {
             try {
-                return new ResponseEntity<Object>(objectMapper.readValue("\"{}\"", Object.class), HttpStatus.NOT_IMPLEMENTED);
+                return new ResponseEntity<Object>(objectMapper.readValue("\"{}\"", Object.class), HttpStatus.BAD_GATEWAY);
             } catch (IOException e) {
                 log.error("Couldn't serialize response for content type application/json", e);
                 return new ResponseEntity<Object>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -52,7 +62,9 @@ public class FruitsApiController implements FruitsApi {
     }
 
     public ResponseEntity<List<Fruit>> getFruits() {
-        String accept = request.getHeader("Accept");
+        ResponseEntity<List<Fruit>> response = new ResponseEntity<List<Fruit>>(fruitRepository.findAll(), HttpStatus.OK);
+        return response;
+        /*String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
                 return new ResponseEntity<List<Fruit>>(objectMapper.readValue("[ {  \"colour\" : \"colour\",  \"size\" : \"size\",  \"kind\" : \"kind\"}, {  \"colour\" : \"colour\",  \"size\" : \"size\",  \"kind\" : \"kind\"} ]", List.class), HttpStatus.NOT_IMPLEMENTED);
@@ -62,7 +74,7 @@ public class FruitsApiController implements FruitsApi {
             }
         }
 
-        return new ResponseEntity<List<Fruit>>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<List<Fruit>>(HttpStatus.NOT_IMPLEMENTED);*/
     }
 
 }
